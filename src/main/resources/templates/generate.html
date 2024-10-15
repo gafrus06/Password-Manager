@@ -23,27 +23,48 @@
       background-color: #939393; /* Задан цвет линии */
       margin-bottom: 50px;
     }
-    .password-list {
-      list-style-type: none;
-      padding: 0;
-      width: 100%;
-      max-width: 800px;
+    .attribute-label {
+      display: block; /* Убедитесь, что метка занимает всю ширину */
+      font-weight: bold;
+      margin-bottom: 5px; /* Отступ снизу для отделения от поля ввода */
+      color: #484848;
+      font-size: 15px;/* Размер шрифта для лучшего восприятия */
     }
-    .password-item {
-      display: flex;
-      align-items: center;
-      background-color: white;
-      border-radius: 10px;
-      padding: 10px 15px;
-      margin: 10px 0;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      text-decoration: none;
-      color: #333;
+
+
+    .username-input {
+      width: 97%; /* Занимает всю ширину контейнера */
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 16px;
+      /* Размер шрифта для ввода */
+    }
+    .username-input-but {
+      width: 97%; /* Занимает всю ширину контейнера */
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 16px;
       transition: background-color 0.2s;
-      cursor: pointer;
+      /* Размер шрифта для ввода */
     }
-    .password-item:hover {
-      background-color: #f0f0f0;
+    .password-details {
+      background-color: white;
+      border-radius: 15px;
+      padding: 50px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      margin: 20px 0;
+    }
+    .password-attribute {
+      background-color: #ffffff;
+      border: 2px solid #ffffff;
+      border-radius: 10px;
+      padding: 10px;
+      margin: 1px 0;
     }
     .password-item img {
       width: 32px;
@@ -99,7 +120,7 @@
       letter-spacing: normal;
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/loaders.css/0.1.2/loaders.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
 <div class="header">
@@ -107,26 +128,216 @@
     <button type="submit">Выйти</button>
   </form>
   <div>
-
-    <button onclick="window.location.href='/dashboard'">Личный кабинет</button>
     <button onclick="window.location.href='/generate-password'">Генератор пароля</button>
   </div>
 </div>
 <div class="title">
-  <h1>SavePass</h1>
-  <h1 class="sub-title">Менеджер паролей</h1>
+  <h1 onclick="window.location.href='/'" style="cursor: pointer">SavePass</h1>
+  <h1 class="sub-title">GenRX | Генератор паролей</h1>
+</div>
+<a href="/create-password" class="create-password-link">Создать пароль</a>
+<div class="divider"></div>
+<div class="password-details">
+
+  <div style="margin-bottom: 10px; margin-top: -20px;">
+    <button type="button" onclick="window.history.back()" style="background: none; border: none; cursor: pointer; position: absolute; top: 16px; left: 10px">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+  </div>
+
+  <div class="password-attribute">
+    <label class="attribute-label" for="length">Длина пароля:</label>
+    <div class="custom-slider">
+      <input type="range" id="length" min="8" max="30" value="16" oninput="this.nextElementSibling.value = this.value">
+      <output>12</output>
+    </div>
+  </div>
+
+  <div class="custom-checkbox">
+    <input type="checkbox" id="useLetters" checked>
+    <label for="useLetters" class="checkbox-circle"></label>
+    Использовать латинские буквы
+  </div>
+
+  <div class="custom-checkbox">
+    <input type="checkbox" id="useNumbers" checked>
+    <label for="useNumbers" class="checkbox-circle"></label>
+    Использовать цифры
+  </div>
+
+  <div class="custom-checkbox">
+    <input type="checkbox" id="useSymbols">
+    <label for="useSymbols" class="checkbox-circle"></label>
+    Использовать специальные знаки
+  </div>
+
+  <div class="password-attribute">
+    <label class="attribute-label" for="complexity">Содержимое:</label>
+    <select id="complexity" class="username-input">
+      <option value="simple">Реальные слова</option>
+      <option value="complex">Случайные символы</option>
+    </select>
+  </div>
+
+  <div class="password-attribute">
+    <button onclick="generatePassword()" class="username-input-but">Сгенерировать пароль</button>
+  </div>
+
+  <div class="password-attribute">
+    <label class="attribute-label">Сгенерированный пароль:</label>
+    <input type="text" id="result" class="username-input" readonly aria-readonly="true">
+  </div>
 </div>
 
-<a href="/create-password" class="create-password-link">Создать пароль</a>
-<div class="divider"></div><!-- Проверка на наличие паролей -->
-<div class="password-list">
-  <ul th:if="${not #lists.isEmpty(passwords)}" class="password-list">
-    <li th:each="password : ${passwords}" class="password-item" th:onclick="|window.location='@{password/{id}(id=${password.passId})}'|">
-      <img th:src="${password.iconUrl}" alt="">
-      <span th:text="${password.webName}"></span>
-    </li>
-  </ul>
-  <p th:if="${#lists.isEmpty(passwords)}" class="lable">Тут пока пусто</p>
-</div>
+<style>
+  .custom-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  input[type="checkbox"] {
+    display: none; /* Скрываем стандартный чекбокс */
+  }
+
+  .checkbox-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    position: relative;
+    margin-right: 10px;
+  }
+
+  input[type="checkbox"]:checked + .checkbox-circle {
+    background-color: #007bff; /* Цвет заполнения при выборе */
+  }
+
+  input[type="checkbox"]:checked + .checkbox-circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: white; /* Цвет внутреннего кружка */
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease;
+  }
+
+  input[type="checkbox"]:not(:checked) + .checkbox-circle::after {
+    transform: scale(0); /* Убираем внутренний кружок при невыборе */
+  }
+  .custom-slider {
+    display: flex;
+    align-items: center;
+  }
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+    margin-right: 10px;
+    transition: background 0.3s ease;
+  }
+
+  input[type="range"]:hover {
+    background: #ccc; /* Изменение цвета при наведении */
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px; /* Увеличенный размер ползунка */
+    height: 24px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease; /* Анимация при наведении */
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    background: #0056b3; /* Темный цвет при наведении */
+    transform: scale(1.1); /* Увеличение размера при наведении */
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease; /* Анимация при наведении */
+  }
+
+  input[type="range"]::-moz-range-thumb:hover {
+    background: #0056b3; /* Темный цвет при наведении */
+    transform: scale(1.1); /* Увеличение размера при наведении */
+  }
+
+  .username-input-but:hover {
+    background-color: rgba(152, 152, 152, 0.76);
+  }
+</style>
+
+<script>
+  async function fetchWord(length) {
+    const response = await fetch(`https://random-word-api.herokuapp.com/word?number=1&length=${length}`);
+    const data = await response.json();
+    return data[0];
+  }
+
+  async function generatePassword() {
+    const length = parseInt(document.getElementById('length').value);
+    const useLetters = document.getElementById('useLetters').checked;
+    const useNumbers = document.getElementById('useNumbers');
+    const useSymbols = document.getElementById('useSymbols');
+    const complexity = document.getElementById('complexity').value;
+
+    let password = '';
+
+    if (complexity === 'simple') {
+      useNumbers.checked = false;
+      useSymbols.checked = false;
+
+      const words = [];
+      let totalLength = 0;
+
+      while (totalLength < length) {
+        const word = await fetchWord(15);
+        if (word) {
+          words.push(word);
+          totalLength += word.length + 1; // +1 for the delimiter
+        }
+      }
+
+      password = words.join('_').substring(0, length); // Объединяем слова и обрезаем до нужной длины
+    } else {
+      let characters = '';
+      if (useLetters) characters += 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (useNumbers.checked) characters += '0123456789';
+      if (useSymbols.checked) characters += '!@#$%^&*()_+[]{}|;:,.<>?';
+
+      if (characters.length === 0) {
+        alert('Выберите хотя бы один тип символов для генерации пароля.');
+        return;
+      }
+
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters[randomIndex];
+      }
+    }
+
+    document.getElementById('result').value = password;
+  }
+</script>
+
 </body>
 </html>

@@ -1,10 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>SavePass</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: #e9ecef;
+    }
+
+    .left {
+      background: linear-gradient(to right, #297bc7, #becce1);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .left2 {
+      color: #ffffff;
+      margin-top: -100px;
+      text-align: center;
+      font-family: "Franklin Gothic Medium", cursive;
+      font-size: 1.6em;
+    }
+
+    .right {
+      background-color: #FFFFFF;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-container {
+      width: 320px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      background-color: #ffffff;
+    }
+
+    h1 {
+      color: #ffffff;
+      font-size: 5em;
+      font-family: "Arial Black", cursive;
+      text-align: center;
+      letter-spacing: 2.5px;
+    }
+
+    h4 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    h5 {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #333;
+      letter-spacing: 0.1px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #333;
+    }
+
+
+
+
+  </style>
 </head>
 <body>
-$END$
+<div class="left">
+  <h1>SavePass</h1><br>
+  <div class="left2">
+    <h7>Держи данные в правильном месте</h7>
+  </div>
+</div>
+<div class="right">
+  <div class="auth-container">
+    <h4>Подтврждение Email</h4>
+    <h5>На вашу почту отправленно письмо. Перейдите по ссылке в этом письме</h5>
+
+  </div>
+</div>
 </body>
 </html>

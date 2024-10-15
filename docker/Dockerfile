@@ -1,4 +1,8 @@
-FROM ubuntu:latest
-LABEL authors="gafru"
+FROM openjdk:17
+ARG JAR_FILE=*.jar
+WORKDIR /app
+COPY ${JAR_FILE} application.jar
 
-ENTRYPOINT ["top", "-b"]
+ENTRYPOINT ["java", "-jar", "application.jar"]
+
+EXPOSE 8080

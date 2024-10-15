@@ -70,7 +70,7 @@
       max-width: 400px;
     }
     input {
-      width: 100%;
+      width: 93%;
       padding: 10px;
       margin-bottom: 20px;
       border: 2px solid #ccc;
@@ -83,6 +83,7 @@
       color: #333;
     }
     .save {
+      width: 99%;
       padding: 10px 164px;
       align-items: center;
       background-color: #007bff;
@@ -101,6 +102,7 @@
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   function validateForm() {
     const webName = document.getElementById("webName").value;
@@ -121,34 +123,32 @@
     <button type="submit">Выйти</button>
   </form>
   <div>
-
-    <button onclick="window.location.href='/dashboard'">Личный кабинет</button>
     <button onclick="window.location.href='/generate-password'">Генератор пароля</button>
   </div>
 </div>
 <div class="title">
-  <h1>SavePass</h1>
-  <h1 class="sub-title">Новый пароль</h1>
+  <h1 onclick="window.location.href='/'" style="cursor: pointer">SavePass</h1>
+  <h1 class="sub-title">Редактирование пароля</h1>
 </div>
 <div class="divider"></div>
-<form class="formCreate" th:action="@{/save-password}" method="post" onsubmit="return validateForm()">
+<form class="formCreate" th:action="@{/edit-password/{passId}(passId=${password.passId})}" enctype="multipart/form-data" method="post" onsubmit="return validateForm()">
   <button type="button" onclick="window.history.back()" style="background: none; border: none; cursor: pointer;">
-    <i class="fas fa-arrow-left"></i> <!-- Иконка стрелки влево -->
+    <i class="fas fa-arrow-left"></i>
   </button>
   <div class="strelochka"></div>
+
   <label for="webName">Название сайта</label>
-  <input type="text" id="webName" name="webName" required>
+  <input type="text" id="webName" name="webName" th:value="${password.webName}" required>
 
   <label for="webLogin">Логин</label>
-  <input type="text" id="webLogin" name="webLogin" required>
+  <input type="text" id="webLogin" name="webLogin" th:value="${password.webLogin}" required>
 
   <label for="webPass">Пароль</label>
-  <input type="password" id="webPass" name="webPass" required>
+  <input type="text" id="webPass" name="webPass" th:value="${password.webPass}" required>
 
   <label for="url">URL сайта</label>
-  <input type="url" id="url" name="url" required>
-
-  <button type="submit" class="save">SavePass</button>
+  <input type="url" id="url" name="url" th:value="${password.url}" required>
+  <button type="submit" class="save">Изменить</button>
 
 </form>
 </body>
